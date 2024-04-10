@@ -39,7 +39,7 @@ function validateForm(form) {
   // isValid = nameValidator(lastName) && isValid;
   // isValid = usernameValidator(username) && isValid; is same because we are checking only empty or lenth
   isValid = emailValidator(email) && isValid; //funtion and regex is same because we are checking only empty or lenth
-  isValid = passwordValidator(password) && isValid;
+  // isValid = passwordValidator(password) && isValid;
   // isValid = phoneNumberValidator(phoneNumber) && isValid;
   // isValid = zipValidator(inputZip) && isValid;
   // validate with regex end
@@ -50,7 +50,7 @@ function validateForm(form) {
   isValid=nameValidatorFn(firstName) && isValid;
   isValid=nameValidatorFn(lastName) && isValid;
   isValid=usernameValidatorFn(username) && isValid;
-  // isValid=passwordValidatorFn(password) && isValid;
+  isValid=passwordValidatorFn(password) && isValid;
   isValid=phoneNumberValidatorFn(phoneNumber) && isValid;
   isValid=zipValidatorFn(inputZip) && isValid;
 
@@ -274,6 +274,56 @@ function passwordValidatorFn(field){
     passError.classList.add("error");
     return false;
   }
+  else if(val.length < 8){
+    field.classList.add("border-red");
+    passError.innerText = "**Password must contain 8 characters.";
+    passError.classList.add("error");
+    return false;
+  }
+  let spCounter=0;
+  let numCounter=0;
+  let upperCounter=0;
+  let lowerCounter=0;
+  let spCharacters='!@#$%^&*';
+  for(let i=0;i<val.length;i++){
+    if(val[i] >= 'a' && val[i] <= 'z' ){
+      lowerCounter++;
+    }
+    else if(val[i] >= 'A' && val[i] <= 'Z'){
+      upperCounter++;
+    }
+    else if(!isNaN(parseInt(val[i]))){
+      numCounter++;
+    }
+        else if(spCharacters.includes(val[i])){
+          spCounter++;
+        }
+  }
+  if(!spCounter){
+    field.classList.add("border-red");
+    passError.innerText = "**Password must a special character.";
+    passError.classList.add("error");
+    return false;
+  }
+  else if(!numCounter){
+    field.classList.add("border-red");
+    passError.innerText = "**Password must contain a number.";
+    passError.classList.add("error");
+    return false;
+  }
+  else if(!upperCounter){
+    field.classList.add("border-red");
+    passError.innerText = "**Password must contain a uppercase.";
+    passError.classList.add("error");
+    return false;
+  }
+  else if(!lowerCounter){
+    field.classList.add("border-red");
+    passError.innerText = "**Password must contain a lowercase.";
+    passError.classList.add("error");
+    return false;
+  }
+  return true;
 }
 
 

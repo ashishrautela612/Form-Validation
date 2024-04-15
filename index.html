@@ -21,10 +21,13 @@
       <div class="col-md-4 firstNameContainer">
         <label for="fname" class="form-label">First name</label>
         <input type="text" class="form-control" id="fname" placeholder="First Name" name="First Name">
+        <span class="Error"></span>
+
       </div>
       <div class="col-md-4 lastNameContainer">
         <label for="lname" class="form-label">Last name</label>
         <input type="text" class="form-control" id="lname" placeholder="Last Name" name="Last Name">
+        <span></span>
       </div>
       <div class="col-md-4 userNameContainer">
         <label for="username" class="form-label">Username</label>
@@ -37,7 +40,7 @@
       </div>
       <div class="col-md-6 emailContainer">
         <label for="email" class="form-label">Email</label>
-        <input type="email" class="form-control" id="email" name="Email">
+        <input type="email" class="form-control" id="email" name="Email" placeholder="Email">
         <span id="emailError"></span>
       </div>
       <div class="col-md-6 passwordContainer">
@@ -47,16 +50,18 @@
       </div>
       <div class="col-md-6 phoneNumberContainer">
         <label for="phoneNumber" class="form-label">Phone Number</label>
-        <input type="tel" class="form-control" id="phoneNumber" name="Phone Number">
+        <input type="tel" class="form-control" id="phoneNumber" name="Phone Number" placeholder="Phone" maxlength="10">
         <span id="phoneError"></span>
       </div>
       <div class="col-12 addressContainer">
         <label for="inputAddress" class="form-label">Address</label>
-        <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St" name="Address" required>
+        <input type="text" class="form-control" id="inputAddress" placeholder="Address" name="Address">
+        <span class="error"></span>
       </div>
       <div class="col-md-6 cityContainer">
         <label for="inputCity" class="form-label">City</label>
-        <input type="text" class="form-control" id="inputCity" name="City" required>
+        <input type="text" class="form-control" id="inputCity" name="City" placeholder="City">
+        <span class="error" id="cityError"></span>
       </div>
       <div class="col-md-4 stateContainer">
         <label for="inputState" class="form-label">State</label>
@@ -102,10 +107,10 @@
       </div>
       <div class="col-md-2 zipContainer">
         <label for="inputZip" class="form-label">Zip</label>
-        <input type="text" class="form-control" id="inputZip" name="Zip">
+        <input type="text" class="form-control" id="inputZip" name="Zip" placeholder="Zip" maxlength="6">
         <span id="zipError"></span>
       </div>
-      <div class="col-12 genderContainer">
+      <!-- <div class="col-12 genderContainer">
         <label for="gender" class="form-label">Gender</label>
         <div class="form-check">
           <input class="form-check-input" type="radio" name="gender" id="male" value="male" required>
@@ -125,9 +130,9 @@
             Other
           </label>
         </div>
-      </div>
+      </div> -->
       <div class="col-6">
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary" id="btn">Submit</button>
       </div>
 
      

@@ -20,3 +20,7 @@
     color: red;
     font-size: 12px;
   }
+
+ .noAllowed{
+  cursor: not-allowed !important;
+ } 

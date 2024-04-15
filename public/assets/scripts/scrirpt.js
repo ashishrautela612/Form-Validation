@@ -4,6 +4,7 @@ function saveFormData(event) {
   console.log(myform);
 
   if (validateForm(myform)) {
+
     let newform = new FormData(document.getElementById("myForm"));
     console.log(newform.keys());
     const jsonData = {};
@@ -35,13 +36,16 @@ function validateForm(form) {
 
 
   // validate with regex
+
   // isValid = nameValidator(firstName) && isValid;
   // isValid = nameValidator(lastName) && isValid;
   // isValid = usernameValidator(username) && isValid; is same because we are checking only empty or lenth
   isValid = emailValidator(email) && isValid; //funtion and regex is same because we are checking only empty or lenth
   // isValid = passwordValidator(password) && isValid;
-  // isValid = phoneNumberValidator(phoneNumber) && isValid;
+  isValid = phoneNumberValidator(phoneNumber) && isValid;
+  isValid=cityValidator(inputCity) && isValid;
   // isValid = zipValidator(inputZip) && isValid;
+  
   // validate with regex end
 
 
@@ -51,26 +55,60 @@ function validateForm(form) {
   isValid=nameValidatorFn(lastName) && isValid;
   isValid=usernameValidatorFn(username) && isValid;
   isValid=passwordValidatorFn(password) && isValid;
-  isValid=phoneNumberValidatorFn(phoneNumber) && isValid;
+  // isValid=phoneNumberValidatorFn(phoneNumber) && isValid;
   isValid=zipValidatorFn(inputZip) && isValid;
+  isValid=emptyCheck(inputAddress) && isValid;
+  isValid=emptyCheck(inputCity) && isValid;
 
+  const btn = document.getElementById("btn");
+if (!isValid) {
+    btn.classList.add("noAllowed");
+    // btn.disabled = true;
+} else {
+    btn.classList.remove("noAllowed");
+    // btn.disabled = false;
+}
 
   return isValid;
 }
 
 //regex valodation
 
+function emptyCheck(field){
+  let val = field.value.trim();
+  let flag = true;
+  let parent=field.parentElement;
+  console.log(parent);
+  let error=parent.querySelector('span');
+
+  if(val==""){
+    field.classList.add("border-red"); 
+    error.innerText=`Please fill the ${field.placeholder}.`;
+    error.classList.add("error");
+    flag=false;
+  }
+  if(flag){
+  field.classList.remove("border-red"); 
+  error.innerText="";
+  error.classList.remove("error")
+  }
+  return flag;
+}
+
 function nameValidator(field) {
   let val = field.value.trim();
   const nameRegex = /^[a-zA-Z\s]+$/;
+  let parent=field.parentElement;
+  let error=parent.querySelector('span');
 
   if (val === "") {
     field.classList.add("border-red"); 
-    alert(`Please fill the ${field.placeholder}.`);
+    error.innerText=`Please fill the ${field.placeholder}.`;
+    error.classList.add("error")
     return false;
   } else if (!nameRegex.test(val)) {
     field.classList.add("border-red"); 
-    alert(`${field.placeholder} can not contain special characters or numbers.`);
+    // alert(`${field.placeholder} can not contain special characters or numbers.`);
     return false;
   } else {
     field.classList.remove("border-red");
@@ -106,7 +144,7 @@ function usernameValidator(field){
 function emailValidator(field) {
   const val = field.value;
   const emailError = document.getElementById("emailError");
-
+  const emailRegex = /^(?=.{1,254}$)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   if (val === "") {
     field.classList.add("border-red");
     emailError.innerText = "**Email cannot be empty.";
@@ -117,7 +155,15 @@ function emailValidator(field) {
     emailError.innerText = "**Email cannot contain more than 50 characters.";
     emailError.classList.add("error");
     return false;
-  } else {
+  } 
+  else if(!emailRegex.test(val)){
+    field.classList.add("border-red");
+    emailError.innerText = "**Email is invalid.";
+    emailError.classList.add("error");
+  }
+  
+  
+  else {
     field.classList.remove("border-red");
     emailError.innerText = "";
     emailError.classList.remove("error");
@@ -132,7 +178,7 @@ function passwordValidator(field){
 
   if(val==""){
     field.classList.add("border-red");
-    alert(`Please fill the ${field.placeholder}.`);
+    // alert(`Please fill the ${field.placeholder}.`);
     passError.innerText = "**Password cannot be empty.";
     passError.classList.add("error");
     return false;
@@ -157,8 +203,8 @@ function phoneNumberValidator(field){
 
   if(val==""){
     field.classList.add("border-red");
-    alert("Please fill the phone number");
-    phoneError.innerText();
+    // alert("Please fill the phone number");
+    phoneError.innerText="Please fill the phone number";
     phoneError.classList.add("error");
     return false;
   }
@@ -189,7 +235,7 @@ function zipValidator(field){
 
   if(val==""){
     field.classList.add("border-red");
-    alert("Please fill the zip code");
+    // alert("Please fill the zip code");
     zipError.innerText="**zip code can'nt be empty";
     zipError.classList.add("error");
     return false;
@@ -208,6 +254,30 @@ function zipValidator(field){
     return true
   }
 }
+
+function cityValidator(field){
+  const onlyLettersRegex = /^[a-zA-Z]+$/;
+  let val=field.value;
+  let cityError=document.getElementById("cityError");
+  if(val==""){
+    field.classList.add("border-red");
+    cityError.innerText="**Please fill the field";
+    cityError.classList.add("error");
+    return false;
+  }
+  else if(!onlyLettersRegex.test(val)){
+    field.classList.add("border-red");
+    cityError.innerText="**Invalid city";
+    cityError.classList.add("error");
+    return false;
+  }
+  else{
+    field.classList.remove("border-red");
+    cityError.innerText="";
+    cityError.classList.remove("error");
+    return true;
+  }
+}
 //regex validation ends
 
 
@@ -217,11 +287,14 @@ function zipValidator(field){
 function nameValidatorFn(field) {
   let val = field.value.trim();
   let flag = true;
-
+  let parent=field.parentElement
+  // console.log(parent.querySelector('span'));
+  let error=parent.querySelector('span');
 
   if(val==""){
     field.classList.add("border-red"); 
-    alert(`Please fill the ${field.placeholder}.`);
+    error.innerText=`Please fill the ${field.placeholder}.`;
+    error.classList.add("error")
     return false;
   }
 
@@ -230,10 +303,16 @@ function nameValidatorFn(field) {
       flag = true;
     } else {
       field.classList.add("border-red"); 
-      alert(`${field.placeholder} can not contain special characters or numbers.`);
+    error.classList.add("error")
+    error.innerText=`${field.placeholder} can not contain special characters or numbers spaces.`;
       flag = false;
       return flag;
     }
+  }
+  if(flag){
+    field.classList.remove("border-red"); 
+    error.innerText="";
+
   }
 
   return flag;
@@ -260,76 +339,84 @@ function usernameValidatorFn(field){
       return flag
     }
   }
+  if(flag){
+    field.classList.remove("border-red"); 
+    let userError=document.getElementById("usernameError");
+    userError.innerText="";
+    userError.classList.remove("error")
+  }
+  
   return flag;
 }
 
-function passwordValidatorFn(field){
-  let val=field.value;
-  const passError=document.getElementById("passError");
 
-  if(val==""){
+function passwordValidatorFn(field) {
+  let val = field.value;
+  const passError = document.getElementById("passError");
+
+  if (val === "") {
     field.classList.add("border-red");
-    alert(`Please fill the ${field.placeholder}.`);
     passError.innerText = "**Password cannot be empty.";
     passError.classList.add("error");
     return false;
-  }
-  else if(val.length < 8){
+  } else if (val.length < 8) {
     field.classList.add("border-red");
     passError.innerText = "**Password must contain 8 characters.";
     passError.classList.add("error");
     return false;
   }
-  let spCounter=0;
-  let numCounter=0;
-  let upperCounter=0;
-  let lowerCounter=0;
-  let spCharacters='!@#$%^&*';
-  for(let i=0;i<val.length;i++){
-    if(val[i] >= 'a' && val[i] <= 'z' ){
+
+  // Counters for different character types
+  let spCounter = 0;
+  let numCounter = 0;
+  let upperCounter = 0;
+  let lowerCounter = 0;
+  let spCharacters = '!@#$%^&*';
+
+  for (let i = 0; i < val.length; i++) {
+    if (val[i] >= 'a' && val[i] <= 'z') {
       lowerCounter++;
-    }
-    else if(val[i] >= 'A' && val[i] <= 'Z'){
+    } else if (val[i] >= 'A' && val[i] <= 'Z') {
       upperCounter++;
-    }
-    else if(!isNaN(parseInt(val[i]))){
+    } else if (!isNaN(parseInt(val[i]))) {
       numCounter++;
+    } else if (spCharacters.includes(val[i])) {
+      spCounter++;
     }
-        else if(spCharacters.includes(val[i])){
-          spCounter++;
-        }
   }
-  if(!spCounter){
+
+  // Validation based on counters
+  if (!spCounter) {
     field.classList.add("border-red");
-    passError.innerText = "**Password must a special character.";
+    passError.innerText = "**Password must contain a special character.";
     passError.classList.add("error");
     return false;
-  }
-  else if(!numCounter){
+  } else if (!numCounter) {
     field.classList.add("border-red");
     passError.innerText = "**Password must contain a number.";
     passError.classList.add("error");
     return false;
-  }
-  else if(!upperCounter){
+  } else if (!upperCounter) {
     field.classList.add("border-red");
-    passError.innerText = "**Password must contain a uppercase.";
+    passError.innerText = "**Password must contain an uppercase letter.";
+    passError.classList.add("error");
+    return false;
+  } else if (!lowerCounter) {
+    field.classList.add("border-red");
+    passError.innerText = "**Password must contain a lowercase letter.";
     passError.classList.add("error");
     return false;
   }
-  else if(!lowerCounter){
-    field.classList.add("border-red");
-    passError.innerText = "**Password must contain a lowercase.";
-    passError.classList.add("error");
-    return false;
-  }
+
+  // Clear errors if all conditions are met
+  field.classList.remove("border-red");
+  passError.innerText = ""; // Clear the error message
+  passError.classList.remove("error");
   return true;
 }
 
 
-
-
-function phoneNumberValidatorFn(field) {
+function phoneNumberValidatorFn(event,field) {
   const val = field.value.trim();
   const phoneError = document.getElementById("phoneError");
 
@@ -338,35 +425,37 @@ function phoneNumberValidatorFn(field) {
     phoneError.innerText = "**Please fill in the phone number.";
     phoneError.classList.add("error");
     return false;
-  } else if (val.length !== 10 || !containsOnlyNumbers(val)) {
+  }
+
+  else if (val.length < 10) {
     field.classList.add("border-red");
-    phoneError.innerText = "**Phone number should contain only 10 digits.";
+    phoneError.innerText = "**Phone number should contain exactly 10 digits.";
     phoneError.classList.add("error");
     return false;
-  } else {
-    field.classList.remove("border-red");
-    phoneError.innerText = "";
-    phoneError.classList.remove("error");
-    return true;
   }
+
+  field.classList.remove("border-red");
+  phoneError.innerText = "";
+  phoneError.classList.remove("error");
+  return true;
 }
+
+// Helper function to check if a string contains only numbers
 function containsOnlyNumbers(value) {
   for (let i = 0; i < value.length; i++) {
     if (isNaN(parseInt(value[i]))) {
       return false;
     }
   }
-  return true; 
+  return true;
 }
-
-
 
 function zipValidatorFn(field){
   let val=field.value;
   let zipError=document.getElementById("zipError");
   if(val==""){
     field.classList.add("border-red");
-    alert("Please fill the zip code");
+    // alert("Please fill the zip code");
     zipError.innerText="**zip code can'nt be empty";
     zipError.classList.add("error");
     return false;
@@ -384,7 +473,124 @@ function zipValidatorFn(field){
     return true
   }
 }
- 
+
+const myForm=document.getElementById("myForm");
+//check validation before submit on keypress
+const firstName = document.querySelector("#fname");
+const lastName = document.querySelector("#lname");
+const username = document.querySelector("#username");
+const email = document.querySelector("#email");
+const password = document.querySelector("#password");
+const phoneNumber = document.querySelector("#phoneNumber");
+const inputZip = document.querySelector("#inputZip");
+const inputAddress = document.querySelector("#inputAddress");
+const inputCity = document.querySelector("#inputCity");
+
+  inputAddress.addEventListener("keyup",()=>{
+    emptyCheck(inputAddress);
+  })
+  inputCity.addEventListener("keyup",()=>{
+    cityValidator(inputCity);
+
+    // emptyCheck(inputCity);
+  })
+  inputCity.addEventListener("keypress", (event) => {
+    const key = event.key.toLowerCase();
+    if (!(key >= 'a' && key <= 'z') && key !== 'backspace') {
+        event.preventDefault();
+    }
+  });
+
+firstName.addEventListener("keypress", (event) => {
+  const key = event.key.toLowerCase();
+  if (!(key >= 'a' && key <= 'z') && key !== 'backspace') {
+      event.preventDefault();
+  }
+  else{
+    console.log(key);
+  nameValidatorFn(firstName);
+  }
+});
+
+firstName.addEventListener("keyup", () => {
+  const btn = document.getElementById("btn");
+
+  if(nameValidatorFn(firstName)){
+    btn.classList.remove("noAllowed");
+
+  }
+
+});
+
+lastName.addEventListener("keypress", (event) => {
+  const key = event.key.toLowerCase();
+  if (!(key >= 'a' && key <= 'z') && key !== 'backspace') {
+      event.preventDefault();
+  }
+});
+
+lastName.addEventListener("keyup", () => {
+  const btn = document.getElementById("btn");
+  if(nameValidatorFn(lastName)){
+    btn.classList.remove("noAllowed");
+  }
+  // validateForm(myForm);
+});
+
+username.addEventListener("keyup", () => {
+  const btn = document.getElementById("btn");
+  if(usernameValidatorFn(username)){
+    btn.classList.remove("noAllowed");
+  }
+});
+
+email.addEventListener("keyup", () => {
+  const btn = document.getElementById("btn");
+  if(emailValidator(email)){
+    btn.classList.remove("noAllowed");
+  }
+});
+
+password.addEventListener("keyup", () => {
+  const btn = document.getElementById("btn");
+  if(passwordValidatorFn(password)){
+    btn.classList.remove("noAllowed");
+  }
+  
+});
+
+phoneNumber.addEventListener("keypress", (event) => {
+  if (!(event.key >= '0' && event.key <= '9') && event.key !== 'Backspace') {
+    event.preventDefault();
+  } 
+  //else {
+  //   phoneNumberValidatorFn(event, phoneNumber);
+  // }
+});
+
+phoneNumber.addEventListener("keyup",event=>{
+  const btn = document.getElementById("btn");
+  if(phoneNumberValidatorFn(event,phoneNumber)){
+    btn.classList.remove("noAllowed");
+  }
+})
+
+inputZip.addEventListener("keypress", (event) => {
+  if (!(event.key >= '0' && event.key <= '9') && event.key !== 'Backspace') {
+    event.preventDefault();
+  } 
+  //else {
+  //   phoneNumberValidatorFn(event, phoneNumber);
+  // }
+});
+
+inputZip.addEventListener("keyup", (event) => {
+  const btn = document.getElementById("btn");
+  if(zipValidatorFn(inputZip)){
+    btn.classList.remove("noAllowed");
+  }
+});
+
 
 
  
